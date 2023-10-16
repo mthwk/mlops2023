@@ -17,7 +17,7 @@ The code uses Pandas for data manipulation, Scikit-learn for TF-IDF vectorizatio
 
    You can click [here](https://files.grouplens.org/datasets/movielens/ml-25m.zip) to download the dataset used, and is expected to be in CSV files ('data/movies.csv' and 'data/ratings.csv').
 
-2. **Executing the script:**
+2 - **Executing the script:**
 
    "All you need to do to run the script is to execute:"
 
@@ -25,7 +25,7 @@ The code uses Pandas for data manipulation, Scikit-learn for TF-IDF vectorizatio
    python movie_recommendation.py
    ```
 
-3. **To get movie recomendations:**
+3 - **To get movie recomendations:**
 
 At first, you should provide the movie's name to receive recommendations. If you wish, you can also provide the movie's ID to get similar films, as shown in the image below:
 
