@@ -1,3 +1,17 @@
+"""
+Movie Recommendation System
+
+The code uses Pandas for data manipulation, Scikit-learn for TF-IDF vectorization, 
+and cosine similarity for recommendation calculations.
+
+Requirements:
+- Python 3.x
+- Pandas
+- Scikit-learn
+
+The movie data is expected to be in CSV files ('data/movies.csv' and 'data/ratings.csv').
+"""
+
 import logging
 import re
 import numpy as np
@@ -10,6 +24,15 @@ logging.basicConfig(filename='movie_recommendation.log',
                     format='%(asctime)s - %(levelname)s - %(message)s')
 
 def read_data(file_path):
+    """
+    Read data from a CSV file.
+    
+    Args:
+        file_path (str): Path to the CSV file.
+    
+    Returns:
+        pd.DataFrame: DataFrame containing the data.
+    """
     try:
         return pd.read_csv(file_path)
     except FileNotFoundError:
@@ -18,10 +41,30 @@ def read_data(file_path):
         return None
 
 def clean_title(title):
+    """
+    Clean a movie title by removing special characters.
+
+    Args:
+        title (str): The title of the movie.
+
+    Returns:
+        str: The cleaned movie title.
+    """
     title = re.sub("[^a-zA-Z0-9 ]", "", title)
     return title
 
 def get_recommendations(movies_df, title, vectorizer, tfidf, num_recommendations=5):
+    """
+    Get movie recommendations based on a search term.
+
+    Args:
+        movies_df (pd.DataFrame): DataFrame containing movie data.
+        title (str): The search term.
+        num_recommendations (int): The number of recommendations to return.
+
+    Returns:
+        pd.DataFrame: DataFrame with recommended movies.
+    """
     title = clean_title(title)
     query_vec = vectorizer.transform([title])
     similarity = cosine_similarity(query_vec, tfidf).flatten()
@@ -30,6 +73,16 @@ def get_recommendations(movies_df, title, vectorizer, tfidf, num_recommendations
     return results
 
 def find_similar_movies(ratings_df, movie_id, movies_df):
+    """
+    Find movies similar to a given movie based on user ratings.
+
+    Args:
+        ratings_df (pd.DataFrame): DataFrame containing user ratings.
+        movie_id (int): The ID of the movie to find similar movies for.
+
+    Returns:
+        pd.DataFrame: DataFrame with similar movies and their scores.
+    """
     similar_users = ratings_df[(ratings_df["movieId"] == movie_id) &
                                (ratings_df["rating"] > 4)]["userId"].unique()
     similar_user_recs = ratings_df[(ratings_df["userId"].isin(similar_users)) &
@@ -47,6 +100,18 @@ def find_similar_movies(ratings_df, movie_id, movies_df):
         movies_df, left_on="movieId", right_on="movieId")[["score", "title", "genres"]]
 
 def user_interaction(movies_df, ratings_df, vectorizer, tfidf):
+    """
+    Implement a user interaction loop for movie recommendations.
+
+    This function allows the user to enter the name of a movie, get recommendations based on
+    the movie name, and find similar movies by user ratings.
+
+    Args:
+        movies_df (pd.DataFrame): DataFrame containing movie data.
+        ratings_df (pd.DataFrame): DataFrame containing user ratings.
+        vectorizer (TfidfVectorizer): A TfidfVectorizer used for vectorization.
+        tfidf (scipy.sparse.csr_matrix): A TF-IDF matrix of movie titles.
+    """
     while True:
         user_input = input("Enter the name of a movie (or 'exit' to quit): ")
         if user_input.lower() == 'exit':
@@ -58,7 +123,7 @@ def user_interaction(movies_df, ratings_df, vectorizer, tfidf):
         else:
             print("No matching movies found.\n")
         logging.info("User input: %s", user_input)
-        movie_id_input = input("Enter the movie ID to find similar movies (or 'skip' to continue): ")
+        movie_id_input = input("Enter movie ID to find similar movies (or 'skip' to continue): ")
         if movie_id_input.lower() == 'skip':
             continue
         try:
