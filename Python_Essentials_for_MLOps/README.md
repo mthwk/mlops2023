@@ -46,7 +46,7 @@ python movie_recomm.py
 
 [Link to Video]()
 
-## Certificate of course ompletion
+## Certificate of course completion
 
 [Dataquest Certificate - Intermediate Python for Web Development](https://app.dataquest.io/view_cert/9E9BFL1XMKQ46VWDKF53)
 
