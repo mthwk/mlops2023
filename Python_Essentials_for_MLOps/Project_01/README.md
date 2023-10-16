@@ -40,7 +40,7 @@ Pylint is a static code analysis tool for Python that checks code for errors, en
 pylint movie_recommendation.py
 ```
 
-The script movie_recommendation.py received a linting score of 8.7.
+The script movie_recommendation.py received a linting score of 8.97.
 
 ![Pylint result](https://github.com/mthwk/mlops2023/blob/74468e199e619f3a1c04881b2214888ad0a0e298/Python_Essentials_for_MLOps/Project_01/images/pylint.png)
 
