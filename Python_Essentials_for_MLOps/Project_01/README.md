@@ -42,7 +42,10 @@ pylint movie_recommendation.py
 
 The script movie_recommendation.py received a linting score of 8.97.
 
-![Pylint result](https://github.com/mthwk/mlops2023/blob/74468e199e619f3a1c04881b2214888ad0a0e298/Python_Essentials_for_MLOps/Project_01/images/pylint.png)
+![Pylint first result](https://github.com/mthwk/mlops2023/blob/74468e199e619f3a1c04881b2214888ad0a0e298/Python_Essentials_for_MLOps/Project_01/images/pylint.png)
 
+After reducing some lines and adding comments to explain sections of the code, the maximum score was achieved, as shown in the following image.
+
+![Pylint final result[(https://github.com/mthwk/mlops2023/blob/3336b0db03a4916462b17b3a7fa3fd0639cc22a8/Python_Essentials_for_MLOps/Project_01/images/pylint2.png)
 ## References
 [Dataquest - Build a Movie Recommendation System in Python](https://github.com/dataquestio/project-walkthroughs/blob/master/movie_recs/movie_recommendations.ipynb)
