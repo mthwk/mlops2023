@@ -1,19 +1,3 @@
-"""
-Movie Recommendation System
-
-**Instructions:**
-- Execute this script to initiate the movie recommendation system.
-- Input the movie's name to receive recommendations based on the movie's title.
-- You can input a movie ID to discover movies that are similar to it based on user ratings.
-
-**Requirements:**
-- Python 3.x
-- Pandas
-- Scikit-learn
-
-The movie data is expected to be stored in CSV files ('data/movies.csv' and 'data/ratings.csv').
-"""
-
 import logging
 import re
 import numpy as np
@@ -21,14 +5,11 @@ import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
-# Configure the logging settings
 logging.basicConfig(filename='movie_recommendation.log',
                     level=logging.DEBUG,
                     format='%(asctime)s - %(levelname)s - %(message)s')
 
-# Read CSV
 def read_data(file_path):
-  
     try:
         return pd.read_csv(file_path)
     except FileNotFoundError:
@@ -36,67 +17,50 @@ def read_data(file_path):
         print("File not found!")
         return None
 
-# Clean the movie title
 def clean_title(title):
-  
     title = re.sub("[^a-zA-Z0-9 ]", "", title)
     return title
 
-# Obtain the five most similar titles to our search term
-def get_recommendations(movies_df, title, vectorizer, tfidf, num_recommendations=5,):
-
+def get_recommendations(movies_df, title, vectorizer, tfidf, num_recommendations=5):
     title = clean_title(title)
     query_vec = vectorizer.transform([title])
     similarity = cosine_similarity(query_vec, tfidf).flatten()
     indices = np.argsort(similarity)[::-1][:num_recommendations]
     results = movies_df.iloc[indices]
-
     return results
 
-# Find 10 similar movies by user ratings
 def find_similar_movies(ratings_df, movie_id, movies_df):
-  
     similar_users = ratings_df[(ratings_df["movieId"] == movie_id) &
                                (ratings_df["rating"] > 4)]["userId"].unique()
     similar_user_recs = ratings_df[(ratings_df["userId"].isin(similar_users)) &
                                    (ratings_df["rating"] > 4)]["movieId"]
     similar_user_recs = similar_user_recs.value_counts() / len(similar_users)
-
     similar_user_recs = similar_user_recs[similar_user_recs > .10]
     all_users = ratings_df[(ratings_df["movieId"].isin(similar_user_recs.index)) &
                            (ratings_df["rating"] > 4)]
     all_user_recs = all_users["movieId"].value_counts() / len(all_users["userId"].unique())
     rec_percentages = pd.concat([similar_user_recs, all_user_recs], axis=1)
     rec_percentages.columns = ["similar", "all"]
-
     rec_percentages["score"] = rec_percentages["similar"] / rec_percentages["all"]
     rec_percentages = rec_percentages.sort_values("score", ascending=False)
     return rec_percentages.head(10).merge(
         movies_df, left_on="movieId", right_on="movieId")[["score", "title", "genres"]]
 
-# User interaction and display of recommendations
 def user_interaction(movies_df, ratings_df, vectorizer, tfidf):
-  
     while True:
         user_input = input("Enter the name of a movie (or 'exit' to quit): ")
         if user_input.lower() == 'exit':
             break
-
         recommendations = get_recommendations(movies_df, user_input, vectorizer, tfidf)
-
         if not recommendations.empty:
             print(f"\nMovie recommendations based on {user_input}:")
             print(recommendations[['title', 'genres']])
         else:
             print("No matching movies found.\n")
-
         logging.info("User input: %s", user_input)
-
-        movie_id_input = input(
-            "Enter the movie ID to find similar movies (or 'skip' to continue): ")
+        movie_id_input = input("Enter the movie ID to find similar movies (or 'skip' to continue): ")
         if movie_id_input.lower() == 'skip':
             continue
-
         try:
             movie_id = int(movie_id_input)
             similar_movies = find_similar_movies(ratings_df, movie_id, movies_df)
