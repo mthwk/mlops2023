@@ -44,7 +44,7 @@ python movie_recomm.py
 
 ## Link to Video
 
-[Link to Video]()
+[Link to Video](https://www.loom.com/share/dd987120abfb48558425cd8a9238263b?sid=c607c398-8133-4973-9fd7-47ae907860f3)
 
 ## Certificate of course completion
 
