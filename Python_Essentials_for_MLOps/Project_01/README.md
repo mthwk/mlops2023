@@ -19,7 +19,7 @@ The code uses Pandas for data manipulation, Scikit-learn for TF-IDF vectorizatio
 
 2 - **Executing the script:**
 
-   "All you need to do to run the script is to execute:"
+   All you need to do to run the script is to execute:
 
    ```
    python movie_recommendation.py
